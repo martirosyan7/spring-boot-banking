@@ -8,6 +8,7 @@ import com.banking.springbootbanking.model.api.model.LoginResponse;
 import com.banking.springbootbanking.service.AccountService;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.LocalUserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,7 @@ public class LocalUserController {
     }
 
     @GetMapping("/me")
+    @SecurityRequirement(name = "bearerAuth")
     public LocalUser getMe(@AuthenticationPrincipal LocalUser user) {
         return user;
     }
