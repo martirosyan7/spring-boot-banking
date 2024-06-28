@@ -2,16 +2,13 @@ package com.banking.springbootbanking.service.impl;
 
 import com.banking.springbootbanking.dto.TransactionDTO;
 import com.banking.springbootbanking.dto.mapper.TransactionMapper;
+import com.banking.springbootbanking.exception.TransactionNotFoundException;
 import com.banking.springbootbanking.model.Transaction;
 import com.banking.springbootbanking.repository.TransactionRepository;
 import com.banking.springbootbanking.service.TransactionService;
-import com.banking.springbootbanking.utils.enums.CurrencyType;
-import com.banking.springbootbanking.utils.enums.TransactionStatus;
-import com.banking.springbootbanking.utils.enums.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO getTransactionById(Long id) {
         Transaction transaction = transactionRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction does not exist"));
-        //TODO: Create a custom exception for this case
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction does not exist"));
         return TransactionMapper.mapToTransactionDto(transaction);
     }
 

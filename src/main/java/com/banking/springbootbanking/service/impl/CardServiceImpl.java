@@ -2,6 +2,7 @@ package com.banking.springbootbanking.service.impl;
 
 import com.banking.springbootbanking.dto.CardDTO;
 import com.banking.springbootbanking.dto.mapper.CardMapper;
+import com.banking.springbootbanking.exception.CardNotFoundException;
 import com.banking.springbootbanking.model.Card;
 import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.repository.LocalUserRepository;
@@ -33,8 +34,7 @@ public class CardServiceImpl implements CardService {
     public CardDTO getCardById(Long id) {
         Card card = cardRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Card does not exist"));
-        //TODO: Create a custom exception for this case
+                .orElseThrow(() -> new CardNotFoundException("Card does not exist"));
         return CardMapper.mapToCardDto(card);
     }
 

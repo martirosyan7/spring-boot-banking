@@ -2,6 +2,7 @@ package com.banking.springbootbanking.service.impl;
 
 import com.banking.springbootbanking.dto.LocalUserDTO;
 import com.banking.springbootbanking.dto.mapper.LocalUserMapper;
+import com.banking.springbootbanking.exception.LocalUserNotFoundException;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.repository.LocalUserRepository;
 import com.banking.springbootbanking.service.LocalUserService;
@@ -18,9 +19,6 @@ public class LocalUserServiceImpl implements LocalUserService {
     @Autowired
     private LocalUserRepository localUserRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public LocalUserDTO createUser(LocalUserDTO userDto) {
         LocalUser user = LocalUserMapper.mapToUser(userDto);
@@ -32,8 +30,7 @@ public class LocalUserServiceImpl implements LocalUserService {
     public LocalUserDTO getUserById(Long id) {
         LocalUser user = localUserRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
-        //TODO: Create a custom exception for this case
+                .orElseThrow(() -> new LocalUserNotFoundException("User does not exist"));
         return LocalUserMapper.mapToUserDto(user);
     }
 

@@ -2,6 +2,7 @@ package com.banking.springbootbanking.service.impl;
 
 import com.banking.springbootbanking.dto.AccountDTO;
 import com.banking.springbootbanking.dto.mapper.AccountMapper;
+import com.banking.springbootbanking.exception.AccountNotFoundException;
 import com.banking.springbootbanking.model.Account;
 import com.banking.springbootbanking.repository.AccountRepository;
 import com.banking.springbootbanking.repository.LocalUserRepository;
@@ -29,8 +30,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDTO getAccountById(Long id) {
         Account account = accountRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Account does not exist"));
-        //TODO: Create a custom exception for this case
+                .orElseThrow(() -> new AccountNotFoundException("Account does not exist"));
         return AccountMapper.mapToAccountDto(account);
     }
 
