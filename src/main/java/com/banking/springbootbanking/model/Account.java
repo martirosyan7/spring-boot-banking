@@ -2,11 +2,15 @@ package com.banking.springbootbanking.model;
 
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "account")
 public class Account {

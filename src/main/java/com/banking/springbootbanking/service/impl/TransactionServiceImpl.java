@@ -1,5 +1,7 @@
 package com.banking.springbootbanking.service.impl;
 
+import com.banking.springbootbanking.dto.TransactionDTO;
+import com.banking.springbootbanking.dto.mapper.TransactionMapper;
 import com.banking.springbootbanking.model.Transaction;
 import com.banking.springbootbanking.repository.TransactionRepository;
 import com.banking.springbootbanking.service.TransactionService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -19,26 +22,25 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
 
     @Override
-    public Transaction createTransaction(Long amount, String description, String senderNumber, String recipientNumber, TransactionType type, TransactionStatus status, CurrencyType currency) {
-        Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
-        transaction.setDescription(description);
-        transaction.setSenderNumber(senderNumber);
-        transaction.setRecipientNumber(recipientNumber);
-        transaction.setType(type);
-        transaction.setStatus(status);
-        transaction.setCurrency(currency);
-
-        return transactionRepository.save(transaction);
+    public TransactionDTO createTransaction(TransactionDTO transactionDTO) {
+        Transaction transaction = TransactionMapper.mapToTransaction(transactionDTO);
+        Transaction savedTransaction = transactionRepository.save(transaction);
+        return TransactionMapper.mapToTransactionDto(savedTransaction);
     }
 
     @Override
-    public Transaction getTransactionById(Long id) {
-        return transactionRepository.findById(id).orElse(null);
+    public TransactionDTO getTransactionById(Long id) {
+        Transaction transaction = transactionRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction does not exist"));
+        //TODO: Create a custom exception for this case
+        return TransactionMapper.mapToTransactionDto(transaction);
     }
 
     @Override
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+    public List<TransactionDTO> getAllTransactions() {
+        return transactionRepository.findAll().stream()
+                .map((transaction) -> TransactionMapper.mapToTransactionDto(transaction))
+                .collect(Collectors.toList());
     }
 }

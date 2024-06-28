@@ -1,12 +1,16 @@
 package com.banking.springbootbanking.service.impl;
 
+import com.banking.springbootbanking.dto.LocalUserDTO;
+import com.banking.springbootbanking.dto.mapper.LocalUserMapper;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.repository.LocalUserRepository;
 import com.banking.springbootbanking.service.LocalUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LocalUserServiceImpl implements LocalUserService {
@@ -14,30 +18,30 @@ public class LocalUserServiceImpl implements LocalUserService {
     @Autowired
     private LocalUserRepository localUserRepository;
 
-    @Override
-    public LocalUser createUser(String username, String firstName, String lastName, String email, String password, String address) {
-        if (localUserRepository.existsByUsername(username)) {
-            throw new RuntimeException("User with this username already exists");
-        }
-        LocalUser user = new LocalUser();
-        user.setUsername(username);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setPassword(password);
-        //TODO: add password hashing
-        user.setAddress(address);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        return localUserRepository.save(user);
+    @Override
+    public LocalUserDTO createUser(LocalUserDTO userDto) {
+        LocalUser user = LocalUserMapper.mapToUser(userDto);
+        LocalUser savedUser = localUserRepository.save(user);
+        return LocalUserMapper.mapToUserDto(savedUser);
     }
 
     @Override
-    public LocalUser getUserById(Long id) {
-        return localUserRepository.findById(id).orElse(null);
+    public LocalUserDTO getUserById(Long id) {
+        LocalUser user = localUserRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+        //TODO: Create a custom exception for this case
+        return LocalUserMapper.mapToUserDto(user);
     }
 
     @Override
-    public List<LocalUser> getAllUsers() {
-        return localUserRepository.findAll();
+    public List<LocalUserDTO> getAllUsers() {
+        List<LocalUser> users = localUserRepository.findAll();
+        return users.stream()
+                .map((user) -> LocalUserMapper.mapToUserDto(user))
+                .collect(Collectors.toList());
     }
 }

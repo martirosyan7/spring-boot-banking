@@ -4,7 +4,9 @@ import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transaction")
 public class Transaction {
     @Id

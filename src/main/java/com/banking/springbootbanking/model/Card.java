@@ -3,8 +3,11 @@ package com.banking.springbootbanking.model;
 import com.banking.springbootbanking.utils.enums.CardType;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -12,6 +15,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "card")
 public class Card {
     @Id
@@ -37,6 +42,7 @@ public class Card {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "local_user_id", nullable = false)
+    @JsonManagedReference
     private LocalUser localUser;
 
     @Column(name = "type", nullable = false)

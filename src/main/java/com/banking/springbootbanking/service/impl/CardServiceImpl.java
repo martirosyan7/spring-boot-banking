@@ -1,17 +1,16 @@
 package com.banking.springbootbanking.service.impl;
 
+import com.banking.springbootbanking.dto.CardDTO;
+import com.banking.springbootbanking.dto.mapper.CardMapper;
 import com.banking.springbootbanking.model.Card;
-import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.repository.LocalUserRepository;
 import com.banking.springbootbanking.service.CardService;
-import com.banking.springbootbanking.utils.enums.CardType;
-import com.banking.springbootbanking.utils.enums.CurrencyType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -24,31 +23,26 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public Card createCard(LocalUser user, String cardNumber, Long balance, String pinCode, LocalDate validUntil, String cvv, CardType type, CurrencyType currencyType) {
-        if (cardRepository.existsByCardNumber(cardNumber)) {
-            throw new RuntimeException("Card with this card number already exists");
-        }
-
-        Card card = new Card();
-        card.setLocalUser(user);
-        card.setCardNumber(cardNumber);
-        card.setBalance(balance);
-        card.setPinCode(pinCode);
-        card.setValidUntil(validUntil);
-        card.setCvv(cvv);
-        card.setType(type);
-        card.setCurrencyType(currencyType);
-
-        return cardRepository.save(card);
+    public CardDTO createCard(CardDTO cardDto) {
+        Card card = CardMapper.mapToCard(cardDto);
+        Card savedCard = cardRepository.save(card);
+        return CardMapper.mapToCardDto(savedCard);
     }
 
     @Override
-    public Card getCardById(Long id) {
-        return cardRepository.findById(id).orElse(null);
+    public CardDTO getCardById(Long id) {
+        Card card = cardRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Card does not exist"));
+        //TODO: Create a custom exception for this case
+        return CardMapper.mapToCardDto(card);
     }
 
     @Override
-    public List<Card> getAllCards() {
-        return cardRepository.findAll();
+    public List<CardDTO> getAllCards() {
+        List<Card> cards = cardRepository.findAll();
+        return cards.stream()
+                .map((card) -> CardMapper.mapToCardDto(card))
+                .collect(Collectors.toList());
     }
 }

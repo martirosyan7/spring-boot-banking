@@ -1,5 +1,6 @@
 package com.banking.springbootbanking.service;
 
+import com.banking.springbootbanking.dto.TransactionDTO;
 import com.banking.springbootbanking.model.Transaction;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
@@ -9,9 +10,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TransactionService {
-    public Transaction createTransaction(Long amount, String description, String senderNumber, String recipientNumber, TransactionType type, TransactionStatus status, CurrencyType currency);
+    TransactionDTO createTransaction(TransactionDTO transactionDTO);
 
-    Transaction getTransactionById(Long id);
+    TransactionDTO getTransactionById(Long id);
 
-    List<Transaction> getAllTransactions();
+    List<TransactionDTO> getAllTransactions();
 }

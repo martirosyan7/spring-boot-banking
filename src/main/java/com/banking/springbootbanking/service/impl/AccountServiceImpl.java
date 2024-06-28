@@ -1,15 +1,15 @@
 package com.banking.springbootbanking.service.impl;
 
+import com.banking.springbootbanking.dto.AccountDTO;
+import com.banking.springbootbanking.dto.mapper.AccountMapper;
 import com.banking.springbootbanking.model.Account;
-import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.repository.AccountRepository;
 import com.banking.springbootbanking.repository.LocalUserRepository;
 import com.banking.springbootbanking.service.AccountService;
-import com.banking.springbootbanking.utils.enums.CurrencyType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -19,27 +19,27 @@ public class AccountServiceImpl implements AccountService {
     private LocalUserRepository userRepository;
 
     @Override
-    public Account createAccount(LocalUser localUser, String accountNumber, CurrencyType currencyType, Long balance) {
-        if (accountRepository.existsByAccountNumber(accountNumber)) {
-            throw new RuntimeException("Account with this account number already exists");
-        }
-
-        Account account = new Account();
-        account.setAccountNumber(accountNumber);
-        account.setCurrencyType(currencyType);
-        account.setBalance(balance);
-        account.setLocalUser(localUser);
-
-        return accountRepository.save(account);
+    public AccountDTO createAccount(AccountDTO accountDto) {
+        Account account = AccountMapper.mapToAccount(accountDto);
+        Account savedAccount = accountRepository.save(account);
+        return AccountMapper.mapToAccountDto(savedAccount);
     }
 
     @Override
-    public Account getAccountById(Long id) {
-        return accountRepository.findById(id).orElse(null);
+    public AccountDTO getAccountById(Long id) {
+        Account account = accountRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Account does not exist"));
+        //TODO: Create a custom exception for this case
+        return AccountMapper.mapToAccountDto(account);
     }
 
+
     @Override
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
+    public List<AccountDTO> getAllAccounts() {
+        List<Account> accounts = accountRepository.findAll();
+        return accounts.stream()
+                .map((account) -> AccountMapper.mapToAccountDto(account))
+                .collect(Collectors.toList());
     }
 }

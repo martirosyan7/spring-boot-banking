@@ -1,14 +1,15 @@
 package com.banking.springbootbanking.service;
 
+import com.banking.springbootbanking.dto.LocalUserDTO;
 import com.banking.springbootbanking.model.LocalUser;
 
 import java.util.List;
 
 public interface LocalUserService {
 
-    LocalUser createUser(String username, String firstName, String lastName, String email, String password, String address);
+    LocalUserDTO createUser(LocalUserDTO userDto);
 
-    LocalUser getUserById(Long id);
+    LocalUserDTO getUserById(Long id);
 
-    List<LocalUser> getAllUsers();
+    List<LocalUserDTO> getAllUsers();
 }
