@@ -1,8 +1,12 @@
 package com.banking.springbootbanking.repository;
 
 import com.banking.springbootbanking.model.LocalUser;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface LocalUserRepository extends JpaRepository<LocalUser, Long> {
+import java.util.Optional;
+
+public interface LocalUserRepository extends CrudRepository<LocalUser, Long> {
     boolean existsByUsername(String username);
+
+    Optional<LocalUser> findByUsername(String username);
 }
