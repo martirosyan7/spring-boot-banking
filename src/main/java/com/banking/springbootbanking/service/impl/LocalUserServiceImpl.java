@@ -1,7 +1,9 @@
 package com.banking.springbootbanking.service.impl;
 
-import com.banking.springbootbanking.dto.LocalUserDTO;
-import com.banking.springbootbanking.dto.mapper.LocalUserMapper;
+import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.TransactionDTO;
+import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
+import com.banking.springbootbanking.model.dto.mapper.TransactionMapper;
 import com.banking.springbootbanking.exception.LocalUserNotFoundException;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.api.model.LoginBody;
@@ -12,9 +14,7 @@ import com.banking.springbootbanking.service.jwt.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,6 +72,13 @@ public class LocalUserServiceImpl implements LocalUserService {
         return null;
     }
 
-
+    @Override
+    public Set<TransactionDTO> getTransactionHistory(Long id) {
+        LocalUser user = localUserRepository.findById(id)
+                .orElseThrow(() -> new LocalUserNotFoundException("User does not exist"));
+        return user.getTransactions().stream()
+                .map(TransactionMapper::mapToTransactionDto)
+                .collect(Collectors.toSet());
+    }
 
 }

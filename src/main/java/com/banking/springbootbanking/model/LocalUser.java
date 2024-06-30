@@ -52,5 +52,8 @@ public class LocalUser {
     @JsonBackReference
     private Set<Account> accounts = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "localUser", orphanRemoval = true)
+    @JsonBackReference
+    private Set<Transaction> transactions = new LinkedHashSet<>();
 
 }

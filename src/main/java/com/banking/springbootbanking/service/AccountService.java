@@ -1,6 +1,6 @@
 package com.banking.springbootbanking.service;
 
-import com.banking.springbootbanking.dto.AccountDTO;
+import com.banking.springbootbanking.model.dto.AccountDTO;
 
 import java.util.List;
 

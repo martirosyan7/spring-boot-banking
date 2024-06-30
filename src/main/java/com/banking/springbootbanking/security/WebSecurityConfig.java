@@ -24,8 +24,13 @@ public class WebSecurityConfig {
         http.csrf().disable()
                 .authorizeRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/api/register/**").permitAll()
+                        .requestMatchers("/api/user/register/**").permitAll()
                         .requestMatchers("/api/user/login").permitAll()
+                        .requestMatchers("/api/accounts/**").permitAll()
+                        .requestMatchers("/api/transactions/**").permitAll()
+                        .requestMatchers("/api/user/*/transactions").permitAll()
+                        .requestMatchers("/api/user/*/**").permitAll()
+                        .requestMatchers("/api/cards/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

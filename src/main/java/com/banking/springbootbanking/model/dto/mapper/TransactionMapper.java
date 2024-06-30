@@ -1,6 +1,6 @@
-package com.banking.springbootbanking.dto.mapper;
+package com.banking.springbootbanking.model.dto.mapper;
 
-import com.banking.springbootbanking.dto.TransactionDTO;
+import com.banking.springbootbanking.model.dto.TransactionDTO;
 import com.banking.springbootbanking.model.Transaction;
 
 public class TransactionMapper {
@@ -14,7 +14,8 @@ public class TransactionMapper {
                 transactionDto.getRecipientNumber(),
                 transactionDto.getType(),
                 transactionDto.getStatus(),
-                transactionDto.getCurrency()
+                transactionDto.getCurrency(),
+                transactionDto.getLocalUser()
         );
         return transaction;
     }
@@ -23,6 +24,7 @@ public class TransactionMapper {
         TransactionDTO transactionDto = new TransactionDTO(
                 transaction.getId(),
                 transaction.getAmount(),
+                transaction.getLocalUser(),
                 transaction.getTime(),
                 transaction.getDescription(),
                 transaction.getSenderNumber(),

@@ -1,7 +1,7 @@
 package com.banking.springbootbanking.service.impl;
 
-import com.banking.springbootbanking.dto.AccountDTO;
-import com.banking.springbootbanking.dto.mapper.AccountMapper;
+import com.banking.springbootbanking.model.dto.AccountDTO;
+import com.banking.springbootbanking.model.dto.mapper.AccountMapper;
 import com.banking.springbootbanking.exception.AccountNotFoundException;
 import com.banking.springbootbanking.model.Account;
 import com.banking.springbootbanking.repository.AccountRepository;
@@ -18,6 +18,11 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     private LocalUserRepository userRepository;
+
+    public AccountServiceImpl(AccountRepository accountRepository, LocalUserRepository userRepository) {
+        this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public AccountDTO createAccount(AccountDTO accountDto) {

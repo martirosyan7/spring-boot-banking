@@ -1,5 +1,7 @@
-package com.banking.springbootbanking.dto;
+package com.banking.springbootbanking.model.dto;
 
+import com.banking.springbootbanking.model.LocalUser;
+import com.banking.springbootbanking.model.Transaction;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
@@ -16,6 +18,7 @@ public class TransactionDTO {
 
     private Long id;
     private Long amount;
+    private LocalUser localUser;
     private LocalDateTime time;
     private String description;
     private String senderNumber;

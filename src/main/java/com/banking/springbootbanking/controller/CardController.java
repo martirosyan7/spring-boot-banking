@@ -1,11 +1,9 @@
 package com.banking.springbootbanking.controller;
 
 
-import com.banking.springbootbanking.dto.CardDTO;
-import com.banking.springbootbanking.dto.LocalUserDTO;
-import com.banking.springbootbanking.dto.mapper.LocalUserMapper;
-import com.banking.springbootbanking.model.Card;
-import com.banking.springbootbanking.model.LocalUser;
+import com.banking.springbootbanking.model.dto.CardDTO;
+import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.LocalUserService;
 import com.banking.springbootbanking.utils.enums.CardType;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/cards")

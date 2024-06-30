@@ -1,6 +1,6 @@
 package com.banking.springbootbanking.service;
 
-import com.banking.springbootbanking.dto.CardDTO;
+import com.banking.springbootbanking.model.dto.CardDTO;
 
 import java.util.List;
 

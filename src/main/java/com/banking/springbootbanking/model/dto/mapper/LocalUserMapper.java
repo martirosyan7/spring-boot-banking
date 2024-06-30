@@ -1,6 +1,6 @@
-package com.banking.springbootbanking.dto.mapper;
+package com.banking.springbootbanking.model.dto.mapper;
 
-import com.banking.springbootbanking.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.LocalUserDTO;
 import com.banking.springbootbanking.model.LocalUser;
 
 public class LocalUserMapper {
@@ -14,7 +14,8 @@ public static LocalUser mapToUser(LocalUserDTO userDto) {
                 userDto.getPassword(),
                 userDto.getAddress(),
                 userDto.getCards(),
-                userDto.getAccounts()
+                userDto.getAccounts(),
+                userDto.getTransactions()
         );
         return user;
     }
@@ -29,7 +30,8 @@ public static LocalUser mapToUser(LocalUserDTO userDto) {
                 user.getPassword(),
                 user.getAddress(),
                 user.getCards(),
-                user.getAccounts()
+                user.getAccounts(),
+                user.getTransactions()
         );
         return userDto;
     }

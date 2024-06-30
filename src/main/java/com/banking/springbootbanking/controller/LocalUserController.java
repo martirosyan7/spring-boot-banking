@@ -1,7 +1,8 @@
 package com.banking.springbootbanking.controller;
 
 
-import com.banking.springbootbanking.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.TransactionDTO;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.api.model.LoginBody;
 import com.banking.springbootbanking.model.api.model.LoginResponse;
@@ -17,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
@@ -77,5 +80,12 @@ public class LocalUserController {
     @SecurityRequirement(name = "bearerAuth")
     public LocalUser getMe(@AuthenticationPrincipal LocalUser user) {
         return user;
+    }
+
+
+    @GetMapping("/{id}/transactions")
+    public ResponseEntity<Set<TransactionDTO>> getTransactionHistory(@PathVariable @RequestParam Long id) {
+        Set<TransactionDTO> transactions = localUserService.getTransactionHistory(id);
+        return ResponseEntity.ok(new HashSet<>(transactions));
     }
 }

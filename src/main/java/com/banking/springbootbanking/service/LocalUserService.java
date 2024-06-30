@@ -1,9 +1,11 @@
 package com.banking.springbootbanking.service;
 
-import com.banking.springbootbanking.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.TransactionDTO;
 import com.banking.springbootbanking.model.api.model.LoginBody;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LocalUserService {
 
@@ -14,4 +16,6 @@ public interface LocalUserService {
     List<LocalUserDTO> getAllUsers();
 
     String loginUser(LoginBody loginBody);
+
+    Set<TransactionDTO> getTransactionHistory(Long id);
 }

@@ -1,8 +1,9 @@
-package com.banking.springbootbanking.dto;
+package com.banking.springbootbanking.model.dto;
 
 
 import com.banking.springbootbanking.model.Account;
 import com.banking.springbootbanking.model.Card;
+import com.banking.springbootbanking.model.Transaction;
 import lombok.*;
 
 import java.util.Set;
@@ -22,6 +23,7 @@ public class LocalUserDTO {
     private String address;
     private Set<Card> cards;
     private Set<Account> accounts;
+    private Set<Transaction> transactions;
 
 
 }

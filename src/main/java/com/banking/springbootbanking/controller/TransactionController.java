@@ -1,9 +1,7 @@
 package com.banking.springbootbanking.controller;
 
 
-import com.banking.springbootbanking.dto.LocalUserDTO;
-import com.banking.springbootbanking.dto.TransactionDTO;
-import com.banking.springbootbanking.model.Transaction;
+import com.banking.springbootbanking.model.dto.TransactionDTO;
 import com.banking.springbootbanking.service.AccountService;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.TransactionService;
@@ -15,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,9 +30,9 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<TransactionDTO> createTransaction(@RequestParam Long amount, @RequestParam String description,
-                                                         @RequestParam String senderNumber, @RequestParam String recipientNumber,
-                                                         @RequestParam TransactionType type, @RequestParam TransactionStatus status,
-                                                         @RequestParam CurrencyType currency) {
+                                                            @RequestParam String senderNumber, @RequestParam String recipientNumber,
+                                                            @RequestParam TransactionType type, @RequestParam TransactionStatus status,
+                                                            @RequestParam CurrencyType currency) {
         TransactionDTO transactionDto = new TransactionDTO();
         transactionDto.setAmount(amount);
         transactionDto.setDescription(description);
@@ -52,6 +49,32 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDTO> getTransactionById(@PathVariable Long id) {
         TransactionDTO transactionDto = transactionService.getTransactionById(id);
+        return ResponseEntity.ok(transactionDto);
+    }
+
+    @PostMapping("/{id}/withdraw")
+    public ResponseEntity<TransactionDTO> withdraw(@RequestParam String number,
+                                                   @RequestParam Long amount,
+                                                   @RequestParam CurrencyType currency) {
+        TransactionDTO transactionDto = transactionService.withdraw(number, amount, currency);
+        return ResponseEntity.ok(transactionDto);
+    }
+
+    @PostMapping("/{id}/deposit")
+    public ResponseEntity<TransactionDTO> deposit(@RequestParam String number,
+                                                  @RequestParam Long amount,
+                                                  @RequestParam CurrencyType currency) {
+        TransactionDTO transactionDto = transactionService.deposit(number, amount, currency);
+        return ResponseEntity.ok(transactionDto);
+    }
+
+    @PostMapping("/{id}/transfer")
+    public ResponseEntity<TransactionDTO> transfer(@RequestParam String senderNumber,
+                                                   @RequestParam String recipientNumber,
+                                                   @RequestParam Long amount,
+                                                   @RequestParam String description,
+                                                   @RequestParam CurrencyType currency) {
+        TransactionDTO transactionDto = transactionService.transfer(senderNumber, recipientNumber, amount, description, currency);
         return ResponseEntity.ok(transactionDto);
     }
 

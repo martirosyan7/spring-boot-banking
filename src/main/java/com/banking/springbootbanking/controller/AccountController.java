@@ -1,10 +1,8 @@
 package com.banking.springbootbanking.controller;
 
-import com.banking.springbootbanking.dto.AccountDTO;
-import com.banking.springbootbanking.dto.LocalUserDTO;
-import com.banking.springbootbanking.dto.mapper.LocalUserMapper;
-import com.banking.springbootbanking.model.Account;
-import com.banking.springbootbanking.model.LocalUser;
+import com.banking.springbootbanking.model.dto.AccountDTO;
+import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
 import com.banking.springbootbanking.service.AccountService;
 import com.banking.springbootbanking.service.LocalUserService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;

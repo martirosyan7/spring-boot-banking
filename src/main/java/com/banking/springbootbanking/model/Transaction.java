@@ -1,14 +1,15 @@
 package com.banking.springbootbanking.model;
 
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -50,5 +51,10 @@ public class Transaction {
 
     @Column(name = "currency", nullable = false)
     private CurrencyType currency;
+
+    @ManyToOne
+    @JoinColumn(name = "local_user_id")
+    @JsonIgnore
+    private LocalUser localUser;
 
 }

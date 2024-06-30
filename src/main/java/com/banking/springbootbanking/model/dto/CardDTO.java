@@ -1,4 +1,4 @@
-package com.banking.springbootbanking.dto;
+package com.banking.springbootbanking.model.dto;
 
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.utils.enums.CardType;

@@ -1,6 +1,6 @@
-package com.banking.springbootbanking.dto.mapper;
+package com.banking.springbootbanking.model.dto.mapper;
 
-import com.banking.springbootbanking.dto.CardDTO;
+import com.banking.springbootbanking.model.dto.CardDTO;
 import com.banking.springbootbanking.model.Card;
 
 public class CardMapper {

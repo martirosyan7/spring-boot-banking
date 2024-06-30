@@ -1,7 +1,7 @@
 package com.banking.springbootbanking.service.impl;
 
-import com.banking.springbootbanking.dto.CardDTO;
-import com.banking.springbootbanking.dto.mapper.CardMapper;
+import com.banking.springbootbanking.model.dto.CardDTO;
+import com.banking.springbootbanking.model.dto.mapper.CardMapper;
 import com.banking.springbootbanking.exception.CardNotFoundException;
 import com.banking.springbootbanking.model.Card;
 import com.banking.springbootbanking.repository.CardRepository;

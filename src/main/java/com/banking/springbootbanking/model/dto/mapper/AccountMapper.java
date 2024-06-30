@@ -1,6 +1,6 @@
-package com.banking.springbootbanking.dto.mapper;
+package com.banking.springbootbanking.model.dto.mapper;
 
-import com.banking.springbootbanking.dto.AccountDTO;
+import com.banking.springbootbanking.model.dto.AccountDTO;
 import com.banking.springbootbanking.model.Account;
 
 public class AccountMapper {
