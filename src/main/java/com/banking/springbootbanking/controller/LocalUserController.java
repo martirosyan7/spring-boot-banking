@@ -1,11 +1,15 @@
 package com.banking.springbootbanking.controller;
 
 
+import com.banking.springbootbanking.model.dto.AccountDTO;
+import com.banking.springbootbanking.model.dto.CardDTO;
 import com.banking.springbootbanking.model.dto.LocalUserDTO;
 import com.banking.springbootbanking.model.dto.TransactionDTO;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.api.model.LoginBody;
 import com.banking.springbootbanking.model.api.model.LoginResponse;
+import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
+import com.banking.springbootbanking.model.dto.mapper.TransactionMapper;
 import com.banking.springbootbanking.service.AccountService;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.LocalUserService;
@@ -16,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -83,9 +89,23 @@ public class LocalUserController {
     }
 
 
-    @GetMapping("/{id}/transactions")
-    public ResponseEntity<Set<TransactionDTO>> getTransactionHistory(@PathVariable @RequestParam Long id) {
-        Set<TransactionDTO> transactions = localUserService.getTransactionHistory(id);
-        return ResponseEntity.ok(new HashSet<>(transactions));
+    @GetMapping("/transactions")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<Set<TransactionDTO>> getTransactionHistory(@AuthenticationPrincipal LocalUser authenticatedUser) {
+        return ResponseEntity.ok(localUserService.getTransactionHistory(LocalUserMapper.mapToUserDto(authenticatedUser).getId()));
+    }
+
+    @GetMapping("/my-accounts")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<List<AccountDTO>> getUserAccounts(@AuthenticationPrincipal LocalUser authenticatedUser) {
+        List<AccountDTO> accounts = accountService.getAccountsByUser(authenticatedUser);
+        return ResponseEntity.ok(accounts);
+    }
+
+    @GetMapping("/my-cards")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<List<CardDTO>> getUserCards(@AuthenticationPrincipal LocalUser authenticatedUser) {
+        List<CardDTO> cards = cardService.getCardsByUser(authenticatedUser);
+        return ResponseEntity.ok(cards);
     }
 }

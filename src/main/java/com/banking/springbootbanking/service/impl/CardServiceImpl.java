@@ -1,5 +1,6 @@
 package com.banking.springbootbanking.service.impl;
 
+import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.dto.CardDTO;
 import com.banking.springbootbanking.model.dto.mapper.CardMapper;
 import com.banking.springbootbanking.exception.CardNotFoundException;
@@ -45,4 +46,13 @@ public class CardServiceImpl implements CardService {
                 .map((card) -> CardMapper.mapToCardDto(card))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<CardDTO> getCardsByUser(LocalUser user) {
+        List<Card> cards = cardRepository.findByLocalUser(user);
+        return cards.stream()
+                .map(CardMapper::mapToCardDto)
+                .collect(Collectors.toList());
+    }
+
 }

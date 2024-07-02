@@ -1,6 +1,7 @@
 package com.banking.springbootbanking.model;
 
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Account {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "local_user_id", nullable = false)
+    @JsonIgnore
     private LocalUser localUser;
 
     @Column(name = "currency_type", nullable = false)

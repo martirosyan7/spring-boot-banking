@@ -81,4 +81,10 @@ public class LocalUserServiceImpl implements LocalUserService {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public LocalUser getByUsername(String username) {
+        return localUserRepository.findByUsername(username)
+                .orElseThrow(() -> new LocalUserNotFoundException("User does not exist"));
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.banking.springbootbanking.service;
 
+import com.banking.springbootbanking.model.Transaction;
 import com.banking.springbootbanking.model.dto.TransactionDTO;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 
@@ -10,11 +11,17 @@ public interface TransactionService {
 
     TransactionDTO getTransactionById(Long id);
 
-    TransactionDTO withdraw(String number, Long amount, CurrencyType currency);
+    TransactionDTO accountWithdraw(String number, Long amount, CurrencyType currency);
 
-    TransactionDTO deposit(String number, Long amount, CurrencyType currency);
+    TransactionDTO cardWithdraw(String number, Long amount, CurrencyType currency);
 
-    TransactionDTO transfer(String senderNumber, String recipientNumber, Long amount, String description, CurrencyType currency);
+    TransactionDTO accountDeposit(String number, Long amount, CurrencyType currency);
+
+    TransactionDTO cardDeposit(String number, Long amount, CurrencyType currency);
+
+    TransactionDTO accountTransfer(String senderNumber, String recipientNumber, Long amount, String description, CurrencyType currency);
+
+    TransactionDTO cardTransfer(String senderNumber, String recipientNumber, Long amount, String description, CurrencyType currency);
 
     List<TransactionDTO> getAllTransactions();
 }

@@ -1,5 +1,6 @@
 package com.banking.springbootbanking.service;
 
+import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.dto.AccountDTO;
 
 import java.util.List;
@@ -11,5 +12,7 @@ public interface AccountService {
     AccountDTO getAccountById(Long id);
 
     List<AccountDTO> getAllAccounts();
+
+    List<AccountDTO> getAccountsByUser(LocalUser user);
 
 }
