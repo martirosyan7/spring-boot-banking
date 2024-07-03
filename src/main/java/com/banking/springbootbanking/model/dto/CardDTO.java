@@ -17,7 +17,7 @@ public class CardDTO {
 
     private Long id;
     private String cardNumber;
-    private Long balance;
+    private Float balance;
     private String pinCode;
     private LocalDate validUntil;
     private String cvv;

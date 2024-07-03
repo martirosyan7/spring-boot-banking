@@ -35,7 +35,7 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<CardDTO> createCard(@RequestParam Long userId,
-                                              @RequestParam Long balance,
+                                              @RequestParam Float balance,
                                               @RequestParam String pinCode,
                                               @RequestParam CardType type,
                                               @RequestParam CurrencyType currencyType) {

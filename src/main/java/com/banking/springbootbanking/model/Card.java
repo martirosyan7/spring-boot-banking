@@ -28,7 +28,7 @@ public class Card {
     private String cardNumber;
 
     @Column(name = "balance", nullable = false)
-    private Long balance;
+    private Float balance;
 
     @Column(name = "pin_code", nullable = false, length = 4)
     private String pinCode;

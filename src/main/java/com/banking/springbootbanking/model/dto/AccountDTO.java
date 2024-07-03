@@ -13,7 +13,7 @@ import lombok.*;
 public class AccountDTO {
 
     private Long id;
-    private Long balance;
+    private Float balance;
     private String accountNumber;
     private LocalUser localUserId;
     private CurrencyType currencyType;

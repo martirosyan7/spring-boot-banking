@@ -32,7 +32,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<AccountDTO> createAccount(@RequestParam Long userId,
                                                     @RequestParam CurrencyType currencyType,
-                                                    @RequestParam Long balance) {
+                                                    @RequestParam Float balance) {
         LocalUserDTO user = localUserService.getUserById(userId);
         NumberGenerator numberGenerator = new NumberGenerator(LocalUserMapper.mapToUser(user), accountRepository, currencyType);
 

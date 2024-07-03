@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class TransactionDTO {
 
     private Long id;
-    private Long amount;
+    private Float amount;
     private LocalUser localUser;
     private LocalDateTime time;
     private String description;

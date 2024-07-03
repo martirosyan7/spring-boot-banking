@@ -10,6 +10,8 @@ import com.banking.springbootbanking.repository.AccountRepository;
 import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.repository.TransactionRepository;
 import com.banking.springbootbanking.service.TransactionService;
+import com.banking.springbootbanking.service.currency.CurrencyConversionService;
+import com.banking.springbootbanking.service.currency.ExchangeRateService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
@@ -32,6 +34,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private CardRepository cardRepository;
 
+    private CurrencyConversionService currencyConversionService;
+
+    public TransactionServiceImpl(CurrencyConversionService currencyConversionService) {
+        this.currencyConversionService = currencyConversionService;
+    }
+
     @Override
     public TransactionDTO createTransaction(TransactionDTO transactionDTO) {
         Transaction transaction = TransactionMapper.mapToTransaction(transactionDTO);
@@ -48,7 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO accountWithdraw(String number, Long amount, CurrencyType currency) {
+    public TransactionDTO accountWithdraw(String number, Float amount, CurrencyType currency) {
         Account account = accountRepository
                 .findByAccountNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Account does not exist"));
@@ -78,7 +86,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO cardWithdraw(String number, Long amount, CurrencyType currency) {
+    public TransactionDTO cardWithdraw(String number, Float amount, CurrencyType currency) {
         Card card = cardRepository
                 .findByCardNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Card does not exist"));
@@ -108,7 +116,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO accountDeposit(String number, Long amount, CurrencyType currency) {
+    public TransactionDTO accountDeposit(String number, Float amount, CurrencyType currency) {
         Account account = accountRepository
                 .findByAccountNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Account does not exist"));
@@ -136,7 +144,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO cardDeposit(String number, Long amount, CurrencyType currency) {
+    public TransactionDTO cardDeposit(String number, Float amount, CurrencyType currency) {
         Card card = cardRepository
                 .findByCardNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Card does not exist"));
@@ -164,7 +172,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO accountTransfer(String senderNumber, String recipientNumber, Long amount, String description, CurrencyType currency) {
+    public TransactionDTO accountTransfer(String senderNumber, String recipientNumber, Float amount, String description, CurrencyType currency) {
         Account sender = accountRepository
                 .findByAccountNumber(senderNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Sender account does not exist"));
@@ -213,7 +221,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO cardTransfer(String senderNumber, String recipientNumber, Long amount, String description, CurrencyType currency) {
+    public TransactionDTO cardTransfer(String senderNumber, String recipientNumber, Float amount, String description, CurrencyType currency) {
+        Float interestRateinUSD;
         Card sender = cardRepository
                 .findByCardNumber(senderNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Sender card does not exist"));
@@ -225,8 +234,30 @@ public class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Insufficient balance");
         }
 
-        sender.setBalance(sender.getBalance() - amount);
-        recipient.setBalance(recipient.getBalance() + amount);
+        if (sender.getCurrencyType() != recipient.getCurrencyType()) {
+            // convert amount to USD first (assuming amount is in USD)
+            float amountInUSD = currencyConversionService.convert(currency, CurrencyType.USD, amount);
+
+            // apply 1% tax on the transaction amount in USD
+            float taxInUSD = amountInUSD * 0.01f;
+            float totalAmountInUSD = amountInUSD + taxInUSD;
+
+            // convert tax-adjusted amount in USD to sender's currency
+            float amountInSenderCurrency = currencyConversionService.convert(CurrencyType.USD, sender.getCurrencyType(), totalAmountInUSD);
+
+            // deduct amount from sender's balance
+            sender.setBalance(sender.getBalance() - amountInSenderCurrency);
+
+            // convert original amount in USD to recipient's currency
+            float amountInRecipientCurrency = currencyConversionService.convert(CurrencyType.USD, recipient.getCurrencyType(), amountInUSD);
+
+            // add amount to recipient's balance
+            recipient.setBalance(recipient.getBalance() + amountInRecipientCurrency);
+        } else {
+            // same currency transfer
+            sender.setBalance(sender.getBalance() - amount);
+            recipient.setBalance(recipient.getBalance() + amount);
+        }
 
         cardRepository.save(sender);
         cardRepository.save(recipient);

@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/transactions/card/deposit").authenticated()
                         .requestMatchers("/api/transactions/card/deposit").authenticated()
                         .requestMatchers("/api/cards/**").permitAll()
+                        .requestMatchers("/api/currency/convert").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

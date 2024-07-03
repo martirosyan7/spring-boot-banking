@@ -21,7 +21,7 @@ public class Account {
     private Long id;
 
     @Column(name = "balance", nullable = false)
-    private Long balance;
+    private Float balance;
 
     @Column(name = "account_number", nullable = false, unique = true, length = 16)
     private String accountNumber;

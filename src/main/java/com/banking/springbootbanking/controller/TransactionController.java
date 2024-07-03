@@ -34,9 +34,12 @@ public class TransactionController {
     private AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<TransactionDTO> createTransaction(@RequestParam Long amount, @RequestParam String description,
-                                                            @RequestParam String senderNumber, @RequestParam String recipientNumber,
-                                                            @RequestParam TransactionType type, @RequestParam TransactionStatus status,
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestParam Float amount,
+                                                            @RequestParam String description,
+                                                            @RequestParam String senderNumber,
+                                                            @RequestParam String recipientNumber,
+                                                            @RequestParam TransactionType type,
+                                                            @RequestParam TransactionStatus status,
                                                             @RequestParam CurrencyType currency) {
         TransactionDTO transactionDto = new TransactionDTO();
         transactionDto.setAmount(amount);
@@ -61,7 +64,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> accountWithdraw(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                           @RequestParam String number,
-                                                          @RequestParam Long amount,
+                                                          @RequestParam Float amount,
                                                           @RequestParam CurrencyType currency) {
         List<AccountDTO> accounts = accountService.getAccountsByUser(authenticatedUser);
         if (accounts.stream().noneMatch(account -> account.getAccountNumber().equals(number))) {
@@ -75,7 +78,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> cardWithdraw(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                        @RequestParam String number,
-                                                       @RequestParam Long amount,
+                                                       @RequestParam Float amount,
                                                        @RequestParam CurrencyType currency) {
         List<CardDTO> cards = cardService.getCardsByUser(authenticatedUser);
         if (cards.stream().noneMatch(card -> card.getCardNumber().equals(number))) {
@@ -89,7 +92,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> accountDeposit(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                          @RequestParam String number,
-                                                         @RequestParam Long amount,
+                                                         @RequestParam Float amount,
                                                          @RequestParam CurrencyType currency) {
         List<AccountDTO> accounts = accountService.getAccountsByUser(authenticatedUser);
         if (accounts.stream().noneMatch(account -> account.getAccountNumber().equals(number))) {
@@ -103,7 +106,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> cardDeposit(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                          @RequestParam String number,
-                                                         @RequestParam Long amount,
+                                                         @RequestParam Float amount,
                                                          @RequestParam CurrencyType currency) {
         List<CardDTO> cards = cardService.getCardsByUser(authenticatedUser);
         if (cards.stream().noneMatch(card -> card.getCardNumber().equals(number))) {
@@ -118,7 +121,7 @@ public class TransactionController {
     public ResponseEntity<TransactionDTO> accountTransfer(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                           @RequestParam String senderAccountNumber,
                                                           @RequestParam String recipientAccountNumber,
-                                                          @RequestParam Long amount,
+                                                          @RequestParam Float amount,
                                                           @RequestParam String description,
                                                           @RequestParam CurrencyType currency) {
 
@@ -136,7 +139,7 @@ public class TransactionController {
     public ResponseEntity<TransactionDTO> cardTransfer(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                           @RequestParam String senderAccountNumber,
                                                           @RequestParam String recipientAccountNumber,
-                                                          @RequestParam Long amount,
+                                                          @RequestParam Float amount,
                                                           @RequestParam String description,
                                                           @RequestParam CurrencyType currency) {
 

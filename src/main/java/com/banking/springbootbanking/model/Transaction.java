@@ -27,7 +27,7 @@ public class Transaction {
     private Long id;
 
     @Column(name = "amount", nullable = false)
-    private Long amount;
+    private Float amount;
 
     @Column(name = "time", nullable = false)
     @CreationTimestamp
