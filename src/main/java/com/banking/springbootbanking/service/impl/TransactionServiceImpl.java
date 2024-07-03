@@ -181,12 +181,16 @@ public class TransactionServiceImpl implements TransactionService {
                 .findByAccountNumber(recipientNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Recipient account does not exist"));
 
-        if (sender.getBalance() < amount) {
+        if (currencyConversionService.convert(currency, CurrencyType.USD, sender.getBalance()) <
+                currencyConversionService.convert(currency, CurrencyType.USD, amount)) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        sender.setBalance(sender.getBalance() - amount);
-        recipient.setBalance(recipient.getBalance() + amount);
+        Float amountInSenderCurrency = currencyConversionService.convert(currency, sender.getCurrencyType(), amount);
+        Float amountInRecipientCurrency = currencyConversionService.convert(currency, recipient.getCurrencyType(), amount);
+
+        sender.setBalance(sender.getBalance() - amountInSenderCurrency);
+        recipient.setBalance(recipient.getBalance() + amountInRecipientCurrency);
 
         accountRepository.save(sender);
         accountRepository.save(recipient);
@@ -230,7 +234,10 @@ public class TransactionServiceImpl implements TransactionService {
                 .findByCardNumber(recipientNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Recipient card does not exist"));
 
-        if (sender.getBalance() < amount) {
+        // check if the sender has enough balance in USD
+
+        if (currencyConversionService.convert(currency, CurrencyType.USD, sender.getBalance()) <
+            currencyConversionService.convert(currency, CurrencyType.USD, amount)) {
             throw new RuntimeException("Insufficient balance");
         }
 
