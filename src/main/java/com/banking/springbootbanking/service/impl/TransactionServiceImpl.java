@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO getTransactionById(Long id) {
+    public TransactionDTO getTransactionById(UUID id) {
         Transaction transaction = transactionRepository
                 .findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction does not exist"));

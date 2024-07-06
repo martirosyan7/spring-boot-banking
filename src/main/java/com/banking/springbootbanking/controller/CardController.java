@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/cards")
@@ -35,7 +36,7 @@ public class CardController {
     private CardRepository cardRepository;
 
     @PostMapping
-    public ResponseEntity<CardDTO> createCard(@RequestParam Long userId,
+    public ResponseEntity<CardDTO> createCard(@RequestParam UUID userId,
                                               @RequestParam BigDecimal balance,
                                               @RequestParam String pinCode,
                                               @RequestParam CardType type,
@@ -61,7 +62,7 @@ public class CardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CardDTO> getCardById(@PathVariable Long id) {
+    public ResponseEntity<CardDTO> getCardById(@PathVariable UUID id) {
         CardDTO cardDto = cardService.getCardById(id);
         return ResponseEntity.ok(cardDto);
     }

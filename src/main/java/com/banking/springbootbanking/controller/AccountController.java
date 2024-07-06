@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -31,7 +32,7 @@ public class AccountController {
     private LocalUserService localUserService;
 
     @PostMapping
-    public ResponseEntity<AccountDTO> createAccount(@RequestParam Long userId,
+    public ResponseEntity<AccountDTO> createAccount(@RequestParam UUID userId,
                                                     @RequestParam CurrencyType currencyType,
                                                     @RequestParam BigDecimal balance) {
         LocalUserDTO user = localUserService.getUserById(userId);
@@ -47,7 +48,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<AccountDTO> getAccountById(@PathVariable UUID id) {
         AccountDTO accountDto = accountService.getAccountById(id);
         return ResponseEntity.ok(accountDto);
     }

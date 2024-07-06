@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 public class LocalUserDTO implements Serializable {
-    private Long id;
+    private UUID id;
     private String username;
     private String firstName;
     private String lastName;

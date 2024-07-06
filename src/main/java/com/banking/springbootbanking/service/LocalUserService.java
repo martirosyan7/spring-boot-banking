@@ -7,18 +7,19 @@ import com.banking.springbootbanking.model.api.model.LoginBody;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public interface LocalUserService {
 
     LocalUserDTO createUser(LocalUserDTO userDto);
 
-    LocalUserDTO getUserById(Long id);
+    LocalUserDTO getUserById(UUID id);
 
     List<LocalUserDTO> getAllUsers();
 
     String loginUser(LoginBody loginBody);
 
-    Set<TransactionDTO> getTransactionHistory(Long id);
+    Set<TransactionDTO> getTransactionHistory(UUID id);
 
     LocalUser getByUsername(String username);
 }

@@ -6,11 +6,12 @@ import com.banking.springbootbanking.utils.enums.CurrencyType;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 public interface TransactionService {
     TransactionDTO createTransaction(TransactionDTO transactionDTO);
 
-    TransactionDTO getTransactionById(Long id);
+    TransactionDTO getTransactionById(UUID id);
 
     TransactionDTO accountWithdraw(String number, BigDecimal amount, CurrencyType currency);
 

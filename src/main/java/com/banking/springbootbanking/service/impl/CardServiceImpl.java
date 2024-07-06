@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +37,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDTO getCardById(Long id) {
+    public CardDTO getCardById(UUID id) {
         Card card = cardRepository
                 .findById(id)
                 .orElseThrow(() -> new CardNotFoundException("Card does not exist"));

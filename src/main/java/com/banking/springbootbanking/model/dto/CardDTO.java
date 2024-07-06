@@ -8,6 +8,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Setter
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @Data
 public class CardDTO implements Serializable {
 
-    private Long id;
+    private UUID id;
     private String cardNumber;
     private BigDecimal balance;
     private String pinCode;

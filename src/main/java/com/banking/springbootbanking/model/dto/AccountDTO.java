@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 @Data
 public class AccountDTO implements Serializable {
 
-    private Long id;
+    private UUID id;
     private BigDecimal balance;
     private String accountNumber;
     private LocalUser localUserId;

@@ -42,7 +42,7 @@ public class LocalUserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public LocalUserDTO getUserById(Long id) {
+    public LocalUserDTO getUserById(UUID id) {
         LocalUser user = localUserRepository
                 .findById(id)
                 .orElseThrow(() -> new LocalUserNotFoundException("User does not exist"));
@@ -73,7 +73,7 @@ public class LocalUserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public Set<TransactionDTO> getTransactionHistory(Long id) {
+    public Set<TransactionDTO> getTransactionHistory(UUID id) {
         LocalUser user = localUserRepository.findById(id)
                 .orElseThrow(() -> new LocalUserNotFoundException("User does not exist"));
         return user.getTransactions().stream()

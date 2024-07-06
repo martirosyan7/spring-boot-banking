@@ -6,6 +6,7 @@ import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class NumberGenerator {
     private LocalUser localUser;
@@ -35,7 +36,7 @@ public class NumberGenerator {
     public String generateCardNumber() {
         String cardNumber;
         do {
-            Long userId = localUser.getId();
+            UUID userId = localUser.getId();
             String middleDigits = generateRandomMiddleDigits();
             int checkDigit = calculateCheckDigit(issuerIdentificationNumber, middleDigits);
 
@@ -48,7 +49,7 @@ public class NumberGenerator {
     public String generateAccountNumber() {
         String accountNumber;
         do {
-            Long userId = localUser.getId();
+            UUID userId = localUser.getId();
             String middleDigits = generateRandomMiddleDigits();
             int currencyDigits = currencyType.getCurrencyDigits();
 

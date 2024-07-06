@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -59,7 +60,7 @@ public class LocalUserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LocalUserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<LocalUserDTO> getUserById(@PathVariable UUID id) {
         LocalUserDTO userDto = localUserService.getUserById(id);
         return ResponseEntity.ok(userDto);
     }
