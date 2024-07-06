@@ -15,6 +15,7 @@ import com.banking.springbootbanking.service.currency.ExchangeRateService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO accountWithdraw(String number, Float amount, CurrencyType currency) {
         Account account = accountRepository
                 .findByAccountNumber(number)
@@ -86,6 +88,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO cardWithdraw(String number, Float amount, CurrencyType currency) {
         Card card = cardRepository
                 .findByCardNumber(number)
@@ -116,6 +119,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO accountDeposit(String number, Float amount, CurrencyType currency) {
         Account account = accountRepository
                 .findByAccountNumber(number)
@@ -144,6 +148,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO cardDeposit(String number, Float amount, CurrencyType currency) {
         Card card = cardRepository
                 .findByCardNumber(number)
@@ -172,6 +177,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO accountTransfer(String senderNumber, String recipientNumber, Float amount, String description, CurrencyType currency) {
         Account sender = accountRepository
                 .findByAccountNumber(senderNumber)
@@ -225,6 +231,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional
     public TransactionDTO cardTransfer(String senderNumber, String recipientNumber, Float amount, String description, CurrencyType currency) {
         Float interestRateinUSD;
         Card sender = cardRepository
