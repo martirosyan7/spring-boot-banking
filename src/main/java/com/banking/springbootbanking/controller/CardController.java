@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<CardDTO> createCard(@RequestParam Long userId,
-                                              @RequestParam Float balance,
+                                              @RequestParam BigDecimal balance,
                                               @RequestParam String pinCode,
                                               @RequestParam CardType type,
                                               @RequestParam CurrencyType currencyType) {

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<AccountDTO> createAccount(@RequestParam Long userId,
                                                     @RequestParam CurrencyType currencyType,
-                                                    @RequestParam Float balance) {
+                                                    @RequestParam BigDecimal balance) {
         LocalUserDTO user = localUserService.getUserById(userId);
         NumberGenerator numberGenerator = new NumberGenerator(LocalUserMapper.mapToUser(user), accountRepository, currencyType);
 

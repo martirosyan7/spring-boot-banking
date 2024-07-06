@@ -6,6 +6,7 @@ import com.banking.springbootbanking.utils.enums.CurrencyType;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -18,7 +19,7 @@ public class CardDTO implements Serializable {
 
     private Long id;
     private String cardNumber;
-    private Float balance;
+    private BigDecimal balance;
     private String pinCode;
     private LocalDate validUntil;
     private String cvv;

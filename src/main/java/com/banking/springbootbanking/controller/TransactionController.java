@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class TransactionController {
     private AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<TransactionDTO> createTransaction(@RequestParam Float amount,
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestParam BigDecimal amount,
                                                             @RequestParam String description,
                                                             @RequestParam String senderNumber,
                                                             @RequestParam String recipientNumber,
@@ -64,7 +65,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> accountWithdraw(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                           @RequestParam String number,
-                                                          @RequestParam Float amount,
+                                                          @RequestParam BigDecimal amount,
                                                           @RequestParam CurrencyType currency) {
         List<AccountDTO> accounts = accountService.getAccountsByUser(authenticatedUser);
         if (accounts.stream().noneMatch(account -> account.getAccountNumber().equals(number))) {
@@ -78,7 +79,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> cardWithdraw(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                        @RequestParam String number,
-                                                       @RequestParam Float amount,
+                                                       @RequestParam BigDecimal amount,
                                                        @RequestParam CurrencyType currency) {
         List<CardDTO> cards = cardService.getCardsByUser(authenticatedUser);
         if (cards.stream().noneMatch(card -> card.getCardNumber().equals(number))) {
@@ -92,7 +93,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> accountDeposit(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                          @RequestParam String number,
-                                                         @RequestParam Float amount,
+                                                         @RequestParam BigDecimal amount,
                                                          @RequestParam CurrencyType currency) {
         List<AccountDTO> accounts = accountService.getAccountsByUser(authenticatedUser);
         if (accounts.stream().noneMatch(account -> account.getAccountNumber().equals(number))) {
@@ -106,7 +107,7 @@ public class TransactionController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<TransactionDTO> cardDeposit(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                          @RequestParam String number,
-                                                         @RequestParam Float amount,
+                                                         @RequestParam BigDecimal amount,
                                                          @RequestParam CurrencyType currency) {
         List<CardDTO> cards = cardService.getCardsByUser(authenticatedUser);
         if (cards.stream().noneMatch(card -> card.getCardNumber().equals(number))) {
@@ -121,7 +122,7 @@ public class TransactionController {
     public ResponseEntity<TransactionDTO> accountTransfer(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                           @RequestParam String senderAccountNumber,
                                                           @RequestParam String recipientAccountNumber,
-                                                          @RequestParam Float amount,
+                                                          @RequestParam BigDecimal amount,
                                                           @RequestParam String description,
                                                           @RequestParam CurrencyType currency) {
 
@@ -139,7 +140,7 @@ public class TransactionController {
     public ResponseEntity<TransactionDTO> cardTransfer(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                           @RequestParam String senderAccountNumber,
                                                           @RequestParam String recipientAccountNumber,
-                                                          @RequestParam Float amount,
+                                                          @RequestParam BigDecimal amount,
                                                           @RequestParam String description,
                                                           @RequestParam CurrencyType currency) {
 

@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,16 +59,17 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDTO accountWithdraw(String number, Float amount, CurrencyType currency) {
+    public TransactionDTO accountWithdraw(String number, BigDecimal amount, CurrencyType currency) {
         Account account = accountRepository
                 .findByAccountNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Account does not exist"));
 
-        if (account.getBalance() < amount) {
+        if (currencyConversionService.convert(currency, CurrencyType.USD, account.getBalance())
+                .compareTo(currencyConversionService.convert(currency, CurrencyType.USD, amount)) < 0) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        account.setBalance(account.getBalance() - amount);
+        account.setBalance(account.getBalance().subtract(amount));
         accountRepository.save(account);
 
         Transaction transaction = new Transaction();
@@ -89,16 +91,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDTO cardWithdraw(String number, Float amount, CurrencyType currency) {
+    public TransactionDTO cardWithdraw(String number, BigDecimal amount, CurrencyType currency) {
         Card card = cardRepository
                 .findByCardNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Card does not exist"));
 
-        if (card.getBalance() < amount) {
+        if (card.getBalance().compareTo(amount) < 0) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        card.setBalance(card.getBalance() - amount);
+        card.setBalance(card.getBalance().subtract(amount));
         cardRepository.save(card);
 
         Transaction transaction = new Transaction();
@@ -120,14 +122,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDTO accountDeposit(String number, Float amount, CurrencyType currency) {
+    public TransactionDTO accountDeposit(String number, BigDecimal amount, CurrencyType currency) {
         Account account = accountRepository
                 .findByAccountNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Account does not exist"));
 
-        if (amount <= 0) throw new RuntimeException("Invalid amount");
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) throw new RuntimeException("Invalid amount");
 
-        account.setBalance(account.getBalance() + amount);
+        account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
 
         Transaction transaction = new Transaction();
@@ -149,14 +151,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDTO cardDeposit(String number, Float amount, CurrencyType currency) {
+    public TransactionDTO cardDeposit(String number, BigDecimal amount, CurrencyType currency) {
         Card card = cardRepository
                 .findByCardNumber(number)
                 .orElseThrow(() -> new TransactionNotFoundException("Card does not exist"));
 
-        if (amount <= 0) throw new RuntimeException("Invalid amount");
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) throw new RuntimeException("Invalid amount");
 
-        card.setBalance(card.getBalance() + amount);
+        card.setBalance(card.getBalance().add(amount));
         cardRepository.save(card);
 
         Transaction transaction = new Transaction();
@@ -178,7 +180,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDTO accountTransfer(String senderNumber, String recipientNumber, Float amount, String description, CurrencyType currency) {
+    public TransactionDTO accountTransfer(String senderNumber, String recipientNumber, BigDecimal amount, String description, CurrencyType currency) {
         Account sender = accountRepository
                 .findByAccountNumber(senderNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Sender account does not exist"));
@@ -187,16 +189,18 @@ public class TransactionServiceImpl implements TransactionService {
                 .findByAccountNumber(recipientNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Recipient account does not exist"));
 
-        if (currencyConversionService.convert(currency, CurrencyType.USD, sender.getBalance()) <
-                currencyConversionService.convert(currency, CurrencyType.USD, amount)) {
+        BigDecimal senderBalanceConverted = currencyConversionService.convert(currency, CurrencyType.USD, sender.getBalance());
+        BigDecimal amountConverted = currencyConversionService.convert(currency, CurrencyType.USD, amount);
+
+        if (senderBalanceConverted.compareTo(amountConverted) < 0) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        Float amountInSenderCurrency = currencyConversionService.convert(currency, sender.getCurrencyType(), amount);
-        Float amountInRecipientCurrency = currencyConversionService.convert(currency, recipient.getCurrencyType(), amount);
+        BigDecimal amountInSenderCurrency = currencyConversionService.convert(currency, sender.getCurrencyType(), amount);
+        BigDecimal amountInRecipientCurrency = currencyConversionService.convert(currency, recipient.getCurrencyType(), amount);
 
-        sender.setBalance(sender.getBalance() - amountInSenderCurrency);
-        recipient.setBalance(recipient.getBalance() + amountInRecipientCurrency);
+        sender.setBalance(sender.getBalance().subtract(amountInSenderCurrency));
+        recipient.setBalance(recipient.getBalance().add(amountInRecipientCurrency));
 
         accountRepository.save(sender);
         accountRepository.save(recipient);
@@ -232,8 +236,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionDTO cardTransfer(String senderNumber, String recipientNumber, Float amount, String description, CurrencyType currency) {
-        Float interestRateinUSD;
+    public TransactionDTO cardTransfer(String senderNumber, String recipientNumber, BigDecimal amount, String description, CurrencyType currency) {
         Card sender = cardRepository
                 .findByCardNumber(senderNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Sender card does not exist"));
@@ -241,63 +244,49 @@ public class TransactionServiceImpl implements TransactionService {
                 .findByCardNumber(recipientNumber)
                 .orElseThrow(() -> new TransactionNotFoundException("Recipient card does not exist"));
 
-        // check if the sender has enough balance in USD
+        // Check if the sender has enough balance in USD
+        BigDecimal senderBalanceConverted = currencyConversionService.convert(currency, CurrencyType.USD, sender.getBalance());
+        BigDecimal amountConverted = currencyConversionService.convert(currency, CurrencyType.USD, amount);
 
-        if (currencyConversionService.convert(currency, CurrencyType.USD, sender.getBalance()) <
-            currencyConversionService.convert(currency, CurrencyType.USD, amount)) {
+        if (senderBalanceConverted.compareTo(amountConverted) < 0) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        if (sender.getCurrencyType() != recipient.getCurrencyType()) {
-            // convert amount to USD first (assuming amount is in USD)
-            float amountInUSD = currencyConversionService.convert(currency, CurrencyType.USD, amount);
+        if (!sender.getCurrencyType().equals(recipient.getCurrencyType())) {
+            // Convert amount to USD first (assuming amount is in sender's currency)
+            BigDecimal amountInUSD = currencyConversionService.convert(currency, CurrencyType.USD, amount);
 
-            // apply 1% tax on the transaction amount in USD
-            float taxInUSD = amountInUSD * 0.01f;
-            float totalAmountInUSD = amountInUSD + taxInUSD;
+            // Apply 1% tax on the transaction amount in USD
+            BigDecimal taxRate = BigDecimal.valueOf(1.01); // BigDecimal for tax rate (1%)
+            BigDecimal totalAmountInUSD = amountInUSD.multiply(taxRate);
 
-            // convert tax-adjusted amount in USD to sender's currency
-            float amountInSenderCurrency = currencyConversionService.convert(CurrencyType.USD, sender.getCurrencyType(), totalAmountInUSD);
+            // Convert tax-adjusted amount in USD to sender's currency
+            BigDecimal amountInSenderCurrency = currencyConversionService.convert(CurrencyType.USD, sender.getCurrencyType(), totalAmountInUSD);
 
-            // deduct amount from sender's balance
-            sender.setBalance(sender.getBalance() - amountInSenderCurrency);
+            // Deduct amount from sender's balance
+            sender.setBalance(sender.getBalance().subtract(amountInSenderCurrency));
 
-            // convert original amount in USD to recipient's currency
-            float amountInRecipientCurrency = currencyConversionService.convert(CurrencyType.USD, recipient.getCurrencyType(), amountInUSD);
+            // Convert original amount in USD to recipient's currency
+            BigDecimal amountInRecipientCurrency = currencyConversionService.convert(CurrencyType.USD, recipient.getCurrencyType(), amountInUSD);
 
-            // add amount to recipient's balance
-            recipient.setBalance(recipient.getBalance() + amountInRecipientCurrency);
+            // Add amount to recipient's balance
+            recipient.setBalance(recipient.getBalance().add(amountInRecipientCurrency));
         } else {
-            // same currency transfer
-            sender.setBalance(sender.getBalance() - amount);
-            recipient.setBalance(recipient.getBalance() + amount);
+            // Same currency transfer
+            sender.setBalance(sender.getBalance().subtract(amount));
+            recipient.setBalance(recipient.getBalance().add(amount));
         }
 
         cardRepository.save(sender);
         cardRepository.save(recipient);
 
-        Transaction transaction1 = new Transaction();
-        transaction1.setAmount(amount);
-        transaction1.setLocalUser(sender.getLocalUser());
-        transaction1.setTime(LocalDateTime.now());
-        transaction1.setDescription(description);
-        transaction1.setSenderNumber(senderNumber);
-        transaction1.setRecipientNumber(recipientNumber);
-        transaction1.setType(TransactionType.TRANSFER);
-        transaction1.setStatus(TransactionStatus.COMPLETED);
-        transaction1.setCurrency(currency);
+        // Create transactions
+        LocalDateTime now = LocalDateTime.now();
 
-        Transaction transaction2 = new Transaction();
-        transaction2.setAmount(amount);
-        transaction2.setLocalUser(recipient.getLocalUser());
-        transaction2.setTime(LocalDateTime.now());
-        transaction2.setDescription(description);
-        transaction2.setSenderNumber(senderNumber);
-        transaction2.setRecipientNumber(recipientNumber);
-        transaction2.setType(TransactionType.TRANSFER);
-        transaction2.setStatus(TransactionStatus.COMPLETED);
-        transaction2.setCurrency(currency);
+        Transaction transaction1 = createTransaction(sender, recipient, amount, description, senderNumber, recipientNumber, currency, now);
+        Transaction transaction2 = createTransaction(recipient, sender, amount, description, senderNumber, recipientNumber, currency, now);
 
+        // Save transactions
         transactionRepository.save(transaction1);
         transactionRepository.save(transaction2);
 
@@ -309,5 +298,19 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findAll().stream()
                 .map((transaction) -> TransactionMapper.mapToTransactionDto(transaction))
                 .collect(Collectors.toList());
+    }
+
+    private Transaction createTransaction(Card sender, Card recipient, BigDecimal amount, String description, String senderNumber, String recipientNumber, CurrencyType currency, LocalDateTime time) {
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setLocalUser(sender.getLocalUser());
+        transaction.setTime(time);
+        transaction.setDescription(description);
+        transaction.setSenderNumber(senderNumber);
+        transaction.setRecipientNumber(recipientNumber);
+        transaction.setType(TransactionType.TRANSFER);
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setCurrency(currency);
+        return transaction;
     }
 }

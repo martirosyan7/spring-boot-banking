@@ -4,6 +4,9 @@ import com.banking.springbootbanking.utils.enums.CurrencyType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Map;
 
 
@@ -13,8 +16,8 @@ public class CurrencyConversionService {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
-    public Float convert(CurrencyType fromCurrency, CurrencyType toCurrency, Float amount) {
-        Map<String, Float> rates;
+    public BigDecimal convert(CurrencyType fromCurrency, CurrencyType toCurrency, BigDecimal amount) {
+        Map<String, BigDecimal> rates;
         try {
             rates = exchangeRateService.getExchangeRates();
         } catch (RuntimeException e) {
@@ -22,9 +25,9 @@ public class CurrencyConversionService {
         }
 
         if (rates.containsKey(fromCurrency.toString()) && rates.containsKey(toCurrency.toString())) {
-            Float fromRate = rates.get(fromCurrency.toString());
-            Float toRate = rates.get(toCurrency.toString());
-            return amount / fromRate * toRate;
+            BigDecimal fromRate = rates.get(fromCurrency.toString());
+            BigDecimal toRate = rates.get(toCurrency.toString());
+            return amount.divide(fromRate, MathContext.DECIMAL128).multiply(toRate).setScale(2, RoundingMode.HALF_UP);
         } else {
             throw new IllegalArgumentException("Invalid currency code: " + fromCurrency + " or " + toCurrency);
         }

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -28,7 +29,7 @@ public class Card {
     private String cardNumber;
 
     @Column(name = "balance", nullable = false)
-    private Float balance;
+    private BigDecimal balance;
 
     @Column(name = "pin_code", nullable = false, length = 4)
     private String pinCode;

@@ -6,6 +6,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,16 +25,16 @@ public class ExchangeRateService {
         this.restTemplate = restTemplate;
     }
 
-    public Map<String, Float> getExchangeRates() {
+    public Map<String, BigDecimal> getExchangeRates() {
         String url = String.format("%s/latest?access_key=%s", apiUrl, apiKey);
         try {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             if (response != null && response.containsKey("rates")) {
-                Map<String, Float> rates = new HashMap<>();
+                Map<String, BigDecimal> rates = new HashMap<>();
                 Map<String, Object> rawRates = (Map<String, Object>) response.get("rates");
                 for (Map.Entry<String, Object> entry : rawRates.entrySet()) {
                     if (entry.getValue() instanceof Number) {
-                        rates.put(entry.getKey(), ((Number) entry.getValue()).floatValue());
+                        rates.put(entry.getKey(), new BigDecimal(entry.getValue().toString()));
                     }
                 }
                 return rates;

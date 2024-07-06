@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class Account {
     private Long id;
 
     @Column(name = "balance", nullable = false)
-    private Float balance;
+    private BigDecimal balance;
 
     @Column(name = "account_number", nullable = false, unique = true, length = 16)
     private String accountNumber;

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/currency")
 public class CurrencyConversionController {
@@ -16,10 +18,10 @@ public class CurrencyConversionController {
     private CurrencyConversionService currencyConversionService;
 
     @GetMapping("/convert")
-    public double convertCurrency(
+    public BigDecimal convertCurrency(
             @RequestParam CurrencyType fromCurrency,
             @RequestParam CurrencyType toCurrency,
-            @RequestParam Float amount) {
+            @RequestParam BigDecimal amount) {
         try {
             return currencyConversionService.convert(fromCurrency, toCurrency, amount);
         } catch (IllegalArgumentException e) {

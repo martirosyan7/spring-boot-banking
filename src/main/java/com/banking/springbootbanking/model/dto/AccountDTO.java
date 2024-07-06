@@ -6,6 +6,7 @@ import com.banking.springbootbanking.utils.enums.CurrencyType;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import java.io.Serializable;
 public class AccountDTO implements Serializable {
 
     private Long id;
-    private Float balance;
+    private BigDecimal balance;
     private String accountNumber;
     private LocalUser localUserId;
     private CurrencyType currencyType;

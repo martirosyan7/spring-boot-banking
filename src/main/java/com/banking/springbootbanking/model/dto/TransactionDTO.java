@@ -8,6 +8,7 @@ import com.banking.springbootbanking.utils.enums.TransactionType;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Setter
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 public class TransactionDTO implements Serializable {
 
     private Long id;
-    private Float amount;
+    private BigDecimal amount;
     private LocalUser localUser;
     private LocalDateTime time;
     private String description;

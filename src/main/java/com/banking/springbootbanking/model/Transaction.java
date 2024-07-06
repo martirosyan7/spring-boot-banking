@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,7 +28,7 @@ public class Transaction {
     private Long id;
 
     @Column(name = "amount", nullable = false)
-    private Float amount;
+    private BigDecimal amount;
 
     @Column(name = "time", nullable = false)
     @CreationTimestamp
