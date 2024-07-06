@@ -6,6 +6,7 @@ import com.banking.springbootbanking.model.Card;
 import com.banking.springbootbanking.model.Transaction;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Setter
@@ -13,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LocalUserDTO {
+public class LocalUserDTO implements Serializable {
     private Long id;
     private String username;
     private String firstName;

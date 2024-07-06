@@ -7,6 +7,7 @@ import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Setter
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TransactionDTO {
+public class TransactionDTO implements Serializable {
 
     private Long id;
     private Float amount;

@@ -5,6 +5,7 @@ import com.banking.springbootbanking.utils.enums.CardType;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CardDTO {
+public class CardDTO implements Serializable {
 
     private Long id;
     private String cardNumber;
