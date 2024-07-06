@@ -8,6 +8,7 @@ import com.banking.springbootbanking.model.Card;
 import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.repository.LocalUserRepository;
 import com.banking.springbootbanking.service.CardService;
+import com.banking.springbootbanking.service.encryption.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,14 @@ public class CardServiceImpl implements CardService {
 
     @Autowired
     private CardRepository cardRepository;
+    @Autowired
+    private EncryptionService encryptionService;
 
 
     @Override
     public CardDTO createCard(CardDTO cardDto) {
         Card card = CardMapper.mapToCard(cardDto);
+        card.setPinCode(encryptionService.encryptPin(card.getPinCode()));
         Card savedCard = cardRepository.save(card);
         return CardMapper.mapToCardDto(savedCard);
     }

@@ -31,7 +31,7 @@ public class Card {
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    @Column(name = "pin_code", nullable = false, length = 4)
+    @Column(name = "pin_code", nullable = false)
     private String pinCode;
 
     @Column(name = "valid_until", nullable = false)

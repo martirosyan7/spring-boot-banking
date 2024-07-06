@@ -20,4 +20,12 @@ public class EncryptionService {
     public boolean checkPassword(String password, String hashedPassword) {
         return passwordEncoder.matches(password, hashedPassword);
     }
+
+    public String encryptPin(String pin) {
+        return passwordEncoder.encode(pin);
+    }
+
+    public boolean checkPin(String pin, String hashedPin) {
+        return passwordEncoder.matches(pin, hashedPin);
+    }
 }
