@@ -14,7 +14,8 @@ public class CardMapper {
                 cardDto.getCvv(),
                 cardDto.getLocalUser(),
                 cardDto.getType(),
-                cardDto.getCurrencyType()
+                cardDto.getCurrencyType(),
+                cardDto.getBank()
         );
         return card;
     }
@@ -29,7 +30,8 @@ public class CardMapper {
                 card.getCvv(),
                 card.getLocalUser(),
                 card.getType(),
-                card.getCurrencyType()
+                card.getCurrencyType(),
+                card.getBank()
         );
         return cardDto;
     }

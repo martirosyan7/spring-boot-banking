@@ -1,5 +1,6 @@
 package com.banking.springbootbanking.utils.generator;
 
+import com.banking.springbootbanking.model.Bank;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.repository.AccountRepository;
 import com.banking.springbootbanking.repository.CardRepository;
@@ -12,20 +13,21 @@ public class NumberGenerator {
     private LocalUser localUser;
     private CardRepository cardRepository;
     private AccountRepository accountRepository;
-    private final String issuerIdentificationNumber = "440806";
-    private final String accountIdentificationNumber = "1570";
+    private Bank bank;
     private CurrencyType currencyType;
     private Random random = new Random();
 
-    public NumberGenerator(LocalUser localUser, CardRepository cardRepository, CurrencyType currencyType) {
+    public NumberGenerator(LocalUser localUser, CardRepository cardRepository, Bank bank, CurrencyType currencyType) {
         this.localUser = localUser;
         this.cardRepository = cardRepository;
+        this.bank = bank;
         this.currencyType = currencyType;
     }
 
-    public NumberGenerator(LocalUser localUser, AccountRepository accountRepository, CurrencyType currencyType) {
+    public NumberGenerator(LocalUser localUser, AccountRepository accountRepository, Bank bank, CurrencyType currencyType) {
         this.localUser = localUser;
         this.accountRepository = accountRepository;
+        this.bank = bank;
         this.currencyType = currencyType;
     }
 
@@ -38,9 +40,9 @@ public class NumberGenerator {
         do {
             UUID userId = localUser.getId();
             String middleDigits = generateRandomMiddleDigits();
-            int checkDigit = calculateCheckDigit(issuerIdentificationNumber, middleDigits);
+            int checkDigit = calculateCheckDigit(bank.getIssuerNumber(), middleDigits);
 
-            cardNumber = String.format("%s%s%d", issuerIdentificationNumber, middleDigits, checkDigit);
+            cardNumber = String.format("%s%s%d", bank.getIssuerNumber(), middleDigits, checkDigit);
         } while (cardRepository.existsByCardNumber(cardNumber));
 
         return cardNumber;
@@ -54,7 +56,7 @@ public class NumberGenerator {
             int currencyDigits = currencyType.getCurrencyDigits();
 
 
-            accountNumber = String.format("%s%s%d", accountIdentificationNumber, middleDigits, currencyDigits);
+            accountNumber = String.format("%s%s%d", bank.getAccountIdentificationNumber(), middleDigits, currencyDigits);
         } while (accountRepository.existsByAccountNumber(accountNumber));
 
         return accountNumber;

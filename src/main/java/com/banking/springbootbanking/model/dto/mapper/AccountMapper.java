@@ -11,7 +11,8 @@ public class AccountMapper {
                 accountDto.getBalance(),
                 accountDto.getAccountNumber(),
                 accountDto.getLocalUserId(),
-                accountDto.getCurrencyType()
+                accountDto.getCurrencyType(),
+                accountDto.getBank()
         );
         return account;
     }
@@ -22,7 +23,8 @@ public class AccountMapper {
                 account.getBalance(),
                 account.getAccountNumber(),
                 account.getLocalUser(),
-                account.getCurrencyType()
+                account.getCurrencyType(),
+                account.getBank()
         );
         return accountDto;
     }

@@ -1,5 +1,6 @@
 package com.banking.springbootbanking.model.dto;
 
+import com.banking.springbootbanking.model.Bank;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.utils.enums.CardType;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
@@ -27,5 +28,6 @@ public class CardDTO implements Serializable {
     private LocalUser localUser;
     private CardType type;
     private CurrencyType currencyType;
+    private Bank bank;
 
 }

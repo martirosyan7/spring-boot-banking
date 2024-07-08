@@ -1,11 +1,15 @@
 package com.banking.springbootbanking.controller;
 
 
+import com.banking.springbootbanking.model.Bank;
 import com.banking.springbootbanking.model.LocalUser;
+import com.banking.springbootbanking.model.dto.BankDTO;
 import com.banking.springbootbanking.model.dto.CardDTO;
 import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.mapper.BankMapper;
 import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
 import com.banking.springbootbanking.repository.CardRepository;
+import com.banking.springbootbanking.service.BankService;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.LocalUserService;
 import com.banking.springbootbanking.utils.enums.CardType;
@@ -32,9 +36,10 @@ import java.util.UUID;
 public class CardController {
     @Autowired
     private CardService cardService;
-
     @Autowired
     private LocalUserService localUserService;
+    @Autowired
+    private BankService bankService;
     @Autowired
     private CardRepository cardRepository;
 
@@ -43,8 +48,11 @@ public class CardController {
     public ResponseEntity<CardDTO> createCard(@AuthenticationPrincipal LocalUser authenticatedUser,
                                               @RequestParam String pinCode,
                                               @RequestParam CardType type,
-                                              @RequestParam CurrencyType currencyType) {
-        NumberGenerator numberGenerator = new NumberGenerator(authenticatedUser, cardRepository, currencyType);
+                                              @RequestParam CurrencyType currencyType,
+                                              @RequestParam UUID bankId) {
+        BankDTO bank = bankService.getBankById(bankId);
+        NumberGenerator numberGenerator = new NumberGenerator(authenticatedUser,
+                cardRepository, BankMapper.mapToBank(bank), currencyType);
         LocalDate now = LocalDate.now();
         String cardNumber = numberGenerator.generateCardNumber();
         LocalDate validUntil = now.plusYears(4);
@@ -58,6 +66,7 @@ public class CardController {
         cardDto.setCvv(CVVGenerator.generateCVV(cardNumber, validUntil));
         cardDto.setType(type);
         cardDto.setCurrencyType(currencyType);
+        cardDto.setBank(BankMapper.mapToBank(bank));
 
         CardDTO createdCard = cardService.createCard(cardDto);
         return new ResponseEntity<>(createdCard, HttpStatus.CREATED);

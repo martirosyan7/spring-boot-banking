@@ -55,4 +55,9 @@ public class Card {
     @Column(name = "currency_type", nullable = false)
     private CurrencyType currencyType;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bank_id", nullable = false)
+    @JsonManagedReference
+    private Bank bank;
+
 }

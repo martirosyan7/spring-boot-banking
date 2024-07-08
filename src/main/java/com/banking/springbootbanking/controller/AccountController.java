@@ -1,11 +1,15 @@
 package com.banking.springbootbanking.controller;
 
+import com.banking.springbootbanking.model.Bank;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.dto.AccountDTO;
+import com.banking.springbootbanking.model.dto.BankDTO;
 import com.banking.springbootbanking.model.dto.LocalUserDTO;
+import com.banking.springbootbanking.model.dto.mapper.BankMapper;
 import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
 import com.banking.springbootbanking.repository.AccountRepository;
 import com.banking.springbootbanking.service.AccountService;
+import com.banking.springbootbanking.service.BankService;
 import com.banking.springbootbanking.service.LocalUserService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
 import com.banking.springbootbanking.utils.generator.NumberGenerator;
@@ -34,18 +38,25 @@ public class AccountController {
     @Autowired
     private LocalUserService localUserService;
 
+    @Autowired
+    private BankService bankService;
+
     @PostMapping("/create")
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<AccountDTO> createAccount(@AuthenticationPrincipal LocalUser authenticatedUser,
                                                     @RequestParam CurrencyType currencyType,
-                                                    @RequestParam BigDecimal balance) {
-        NumberGenerator numberGenerator = new NumberGenerator(authenticatedUser, accountRepository, currencyType);
+                                                    @RequestParam BigDecimal balance,
+                                                    @RequestParam UUID bankId) {
+        BankDTO bank = bankService.getBankById(bankId);
+        NumberGenerator numberGenerator = new NumberGenerator(authenticatedUser,
+                accountRepository, BankMapper.mapToBank(bank), currencyType);
 
         AccountDTO accountDto = new AccountDTO();
         accountDto.setLocalUserId(authenticatedUser);
         accountDto.setAccountNumber(numberGenerator.generateAccountNumber());
         accountDto.setCurrencyType(currencyType);
         accountDto.setBalance(balance);
+        accountDto.setBank(BankMapper.mapToBank(bank));
 
         return new ResponseEntity<>(accountService.createAccount(accountDto), HttpStatus.CREATED);
     }

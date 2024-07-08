@@ -28,10 +28,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/user/me", "/api/user/transactions").authenticated()
                         .requestMatchers("/api/accounts", "/api/accounts/{id}").permitAll()
                         .requestMatchers("/api/transactions/account/**").authenticated()
-                        .requestMatchers("/api/transactions/card/deposit").authenticated()
+                        .requestMatchers("/api/transactions/card/**").authenticated()
                         .requestMatchers("/api/cards", "/api/cards/{id}").permitAll()
                         .requestMatchers("/api/currency/convert").permitAll()
                         .requestMatchers("/api/accounts/create", "/api/cards/create").authenticated()
+                        .requestMatchers("/api/banks/create").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
