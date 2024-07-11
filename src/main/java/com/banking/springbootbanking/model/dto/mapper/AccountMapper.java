@@ -10,7 +10,7 @@ public class AccountMapper {
                 accountDto.getId(),
                 accountDto.getBalance(),
                 accountDto.getAccountNumber(),
-                accountDto.getLocalUserId(),
+                accountDto.getLocalUser(),
                 accountDto.getCurrencyType(),
                 accountDto.getBank()
         );

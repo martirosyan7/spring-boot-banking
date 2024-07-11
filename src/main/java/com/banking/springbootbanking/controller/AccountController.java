@@ -52,7 +52,7 @@ public class AccountController {
                 accountRepository, BankMapper.mapToBank(bank), currencyType);
 
         AccountDTO accountDto = new AccountDTO();
-        accountDto.setLocalUserId(authenticatedUser);
+        accountDto.setLocalUser(authenticatedUser);
         accountDto.setAccountNumber(numberGenerator.generateAccountNumber());
         accountDto.setCurrencyType(currencyType);
         accountDto.setBalance(balance);

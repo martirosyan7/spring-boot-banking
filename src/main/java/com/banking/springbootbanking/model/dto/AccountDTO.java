@@ -19,7 +19,7 @@ public class AccountDTO implements Serializable {
     private UUID id;
     private BigDecimal balance;
     private String accountNumber;
-    private LocalUser localUserId;
+    private LocalUser localUser;
     private CurrencyType currencyType;
     private Bank bank;
 }

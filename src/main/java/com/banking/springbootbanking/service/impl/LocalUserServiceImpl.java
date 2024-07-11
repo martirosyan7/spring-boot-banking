@@ -26,12 +26,13 @@ public class LocalUserServiceImpl implements LocalUserService {
     @Autowired
     private EncryptionService encryptionService;
 
+    @Autowired
     private JWTService jwtService;
 
-    public LocalUserServiceImpl(LocalUserRepository localUserRepository, EncryptionService encryptionService, JWTService jwtService) {
-        this.encryptionService = encryptionService;
-        this.jwtService = jwtService;
-    }
+//    public LocalUserServiceImpl(LocalUserRepository localUserRepository, EncryptionService encryptionService, JWTService jwtService) {
+//        this.encryptionService = encryptionService;
+//        this.jwtService = jwtService;
+//    }
 
     @Override
     public LocalUserDTO createUser(LocalUserDTO userDto) {

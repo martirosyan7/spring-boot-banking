@@ -37,11 +37,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private CardRepository cardRepository;
 
+    @Autowired
     private CurrencyConversionService currencyConversionService;
 
-    public TransactionServiceImpl(CurrencyConversionService currencyConversionService) {
-        this.currencyConversionService = currencyConversionService;
-    }
+//    public TransactionServiceImpl(CurrencyConversionService currencyConversionService) {
+//        this.currencyConversionService = currencyConversionService;
+//    }
 
     @Override
     public TransactionDTO createTransaction(TransactionDTO transactionDTO) {

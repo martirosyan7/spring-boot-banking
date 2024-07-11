@@ -1,5 +1,8 @@
 package com.banking.springbootbanking.model.api.model;
 
+import lombok.Setter;
+
+@Setter
 public class LoginBody {
 
     private String username;
@@ -12,4 +15,5 @@ public class LoginBody {
     public String getPassword() {
         return password;
     }
+
 }

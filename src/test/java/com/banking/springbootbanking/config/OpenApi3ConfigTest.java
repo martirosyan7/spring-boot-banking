@@ -18,17 +18,14 @@ public class OpenApi3ConfigTest {
 
     @Test
     public void testOpenApi3Config() {
-        // Check if the OpenApi3Config bean is loaded
         OpenApi3Config openApi3Config = context.getBean(OpenApi3Config.class);
         assertNotNull(openApi3Config);
 
-        // Verify OpenAPI Definition annotation
         OpenAPIDefinition openAPIDefinition = OpenApi3Config.class.getAnnotation(OpenAPIDefinition.class);
         assertNotNull(openAPIDefinition);
         assertEquals("Demo Application", openAPIDefinition.info().title());
         assertEquals("v1", openAPIDefinition.info().version());
 
-        // Verify SecurityScheme annotation
         SecurityScheme securityScheme = OpenApi3Config.class.getAnnotation(SecurityScheme.class);
         assertNotNull(securityScheme);
         assertEquals("bearerAuth", securityScheme.name());

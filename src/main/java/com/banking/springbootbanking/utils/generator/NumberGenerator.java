@@ -5,10 +5,14 @@ import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.repository.AccountRepository;
 import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Random;
 import java.util.UUID;
 
+@Setter
+@Getter
 public class NumberGenerator {
     private LocalUser localUser;
     private CardRepository cardRepository;

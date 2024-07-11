@@ -1,13 +1,10 @@
 package com.banking.springbootbanking.controller;
 
 
-import com.banking.springbootbanking.model.Bank;
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.model.dto.BankDTO;
 import com.banking.springbootbanking.model.dto.CardDTO;
-import com.banking.springbootbanking.model.dto.LocalUserDTO;
 import com.banking.springbootbanking.model.dto.mapper.BankMapper;
-import com.banking.springbootbanking.model.dto.mapper.LocalUserMapper;
 import com.banking.springbootbanking.repository.CardRepository;
 import com.banking.springbootbanking.service.BankService;
 import com.banking.springbootbanking.service.CardService;
@@ -19,7 +16,6 @@ import com.banking.springbootbanking.utils.generator.NumberGenerator;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
