@@ -9,6 +9,7 @@ import com.banking.springbootbanking.service.AccountService;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.TransactionService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.banking.springbootbanking.utils.enums.TransactionDirection;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -41,6 +42,7 @@ public class TransactionController {
                                                             @RequestParam String senderNumber,
                                                             @RequestParam String recipientNumber,
                                                             @RequestParam TransactionType type,
+                                                            @RequestParam TransactionDirection direction,
                                                             @RequestParam TransactionStatus status,
                                                             @RequestParam CurrencyType currency) {
         TransactionDTO transactionDto = new TransactionDTO();
@@ -49,6 +51,7 @@ public class TransactionController {
         transactionDto.setSenderNumber(senderNumber);
         transactionDto.setRecipientNumber(recipientNumber);
         transactionDto.setType(type);
+        transactionDto.setDirection(direction);
         transactionDto.setStatus(status);
         transactionDto.setCurrency(currency);
 

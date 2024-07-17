@@ -8,6 +8,7 @@ import com.banking.springbootbanking.service.AccountService;
 import com.banking.springbootbanking.service.CardService;
 import com.banking.springbootbanking.service.TransactionService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.banking.springbootbanking.utils.enums.TransactionDirection;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,7 @@ public class TransactionControllerTest {
         String senderNumber = "123456789";
         String recipientNumber = "987654321";
         TransactionType type = TransactionType.TRANSFER;
+        TransactionDirection direction = TransactionDirection.INCOMING;
         TransactionStatus status = TransactionStatus.COMPLETED;
         CurrencyType currency = CurrencyType.USD;
 
@@ -64,13 +66,14 @@ public class TransactionControllerTest {
         mockTransactionDto.setSenderNumber(senderNumber);
         mockTransactionDto.setRecipientNumber(recipientNumber);
         mockTransactionDto.setType(type);
+        mockTransactionDto.setDirection(direction);
         mockTransactionDto.setStatus(status);
         mockTransactionDto.setCurrency(currency);
 
         when(transactionService.createTransaction(any(TransactionDTO.class))).thenReturn(mockTransactionDto);
 
         ResponseEntity<TransactionDTO> response = controller.createTransaction(amount, description, senderNumber,
-                recipientNumber, type, status, currency);
+                recipientNumber, type, direction, status, currency);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(mockTransactionDto, response.getBody());

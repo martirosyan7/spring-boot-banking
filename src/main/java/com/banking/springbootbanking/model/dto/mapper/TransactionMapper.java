@@ -13,6 +13,7 @@ public class TransactionMapper {
                 transactionDto.getSenderNumber(),
                 transactionDto.getRecipientNumber(),
                 transactionDto.getType(),
+                transactionDto.getDirection(),
                 transactionDto.getStatus(),
                 transactionDto.getCurrency(),
                 transactionDto.getLocalUser()
@@ -30,6 +31,7 @@ public class TransactionMapper {
                 transaction.getSenderNumber(),
                 transaction.getRecipientNumber(),
                 transaction.getType(),
+                transaction.getDirection(),
                 transaction.getStatus(),
                 transaction.getCurrency()
         );

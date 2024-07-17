@@ -2,6 +2,7 @@ package com.banking.springbootbanking.model.dto;
 
 import com.banking.springbootbanking.model.LocalUser;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.banking.springbootbanking.utils.enums.TransactionDirection;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import lombok.*;
@@ -26,6 +27,7 @@ public class TransactionDTO implements Serializable {
     private String senderNumber;
     private String recipientNumber;
     private TransactionType type;
+    private TransactionDirection direction;
     private TransactionStatus status;
     private CurrencyType currency;
 

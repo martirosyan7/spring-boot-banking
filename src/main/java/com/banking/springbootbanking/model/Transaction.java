@@ -1,6 +1,7 @@
 package com.banking.springbootbanking.model;
 
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.banking.springbootbanking.utils.enums.TransactionDirection;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -49,6 +50,9 @@ public class Transaction {
 
     @Column(name = "type", nullable = false)
     private TransactionType type;
+
+    @Column(name = "direction", nullable = false)
+    private TransactionDirection direction;
 
     @Column(name = "status", nullable = false)
     private TransactionStatus status;

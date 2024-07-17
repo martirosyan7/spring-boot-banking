@@ -133,6 +133,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>spring-boot-banking</finalName>
 	</build>
 
 </project>

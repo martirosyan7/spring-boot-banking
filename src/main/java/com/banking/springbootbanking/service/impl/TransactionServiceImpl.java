@@ -13,6 +13,7 @@ import com.banking.springbootbanking.service.TransactionService;
 import com.banking.springbootbanking.service.currency.CurrencyConversionService;
 import com.banking.springbootbanking.service.currency.ExchangeRateService;
 import com.banking.springbootbanking.utils.enums.CurrencyType;
+import com.banking.springbootbanking.utils.enums.TransactionDirection;
 import com.banking.springbootbanking.utils.enums.TransactionStatus;
 import com.banking.springbootbanking.utils.enums.TransactionType;
 import jakarta.transaction.Transactional;
@@ -81,7 +82,8 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setDescription("Withdraw");
         transaction.setSenderNumber(number);
         transaction.setRecipientNumber(""); // no recipient for withdraw
-        transaction.setType(TransactionType.DEPOSIT);
+        transaction.setType(TransactionType.WITHDRAWAL);
+        transaction.setDirection(TransactionDirection.SEND);
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setCurrency(currency);
         transactionRepository.save(transaction);
@@ -112,7 +114,8 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setDescription("Withdraw");
         transaction.setSenderNumber(number);
         transaction.setRecipientNumber(""); // no recipient for withdraw
-        transaction.setType(TransactionType.DEPOSIT);
+        transaction.setType(TransactionType.WITHDRAWAL);
+        transaction.setDirection(TransactionDirection.SEND);
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setCurrency(currency);
         transactionRepository.save(transaction);
@@ -142,6 +145,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setSenderNumber(""); // no sender for deposit
         transaction.setRecipientNumber(number);
         transaction.setType(TransactionType.DEPOSIT);
+        transaction.setDirection(TransactionDirection.RECEIVE);
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setCurrency(currency);
         transactionRepository.save(transaction);
@@ -171,6 +175,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setSenderNumber(""); // no sender for deposit
         transaction.setRecipientNumber(number);
         transaction.setType(TransactionType.DEPOSIT);
+        transaction.setDirection(TransactionDirection.RECEIVE);
         transaction.setStatus(TransactionStatus.COMPLETED);
         transaction.setCurrency(currency);
         transactionRepository.save(transaction);
@@ -215,6 +220,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction1.setSenderNumber(senderNumber);
         transaction1.setRecipientNumber(recipientNumber);
         transaction1.setType(TransactionType.TRANSFER);
+        transaction1.setDirection(TransactionDirection.SEND);
         transaction1.setStatus(TransactionStatus.COMPLETED);
         transaction1.setCurrency(currency);
 
@@ -226,6 +232,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction2.setSenderNumber(senderNumber);
         transaction2.setRecipientNumber(recipientNumber);
         transaction2.setType(TransactionType.TRANSFER);
+        transaction2.setDirection(TransactionDirection.RECEIVE);
         transaction2.setStatus(TransactionStatus.COMPLETED);
         transaction2.setCurrency(currency);
 
@@ -286,7 +293,10 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDateTime now = LocalDateTime.now();
 
         Transaction transaction1 = createTransaction(sender, recipient, amount, description, senderNumber, recipientNumber, currency, now);
+        transaction1.setDirection(TransactionDirection.SEND);
         Transaction transaction2 = createTransaction(recipient, sender, amount, description, senderNumber, recipientNumber, currency, now);
+        transaction2.setDirection(TransactionDirection.RECEIVE);
+
 
         // Save transactions
         transactionRepository.save(transaction1);
