@@ -26,6 +26,4 @@ public class LocalUserDTO implements Serializable {
     private Set<Card> cards;
     private Set<Account> accounts;
     private Set<Transaction> transactions;
-
-
 }
